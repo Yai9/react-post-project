@@ -3,7 +3,7 @@ import {Link} from 'react-router-dom'
 import "./Post.css";
 
 const Post = (props) => {
-  return (
+	return (
     <Fragment>
       <div key={props.id} className="single_post">
         <div className="single_post_owner">
@@ -13,7 +13,8 @@ const Post = (props) => {
             alt={props.owner.firstName}
           />
           <h4>
-            {props.owner.firstName} {props.owner.lastName}
+            {props.owner.firstName + ' '} 
+	    {props.owner.lastName}
           </h4>
           <span className="post_date">{props.date}</span>
         </div>

@@ -17,7 +17,6 @@ const Posts = () => {
       );
       const result = await postData.json();
       setData(result);
-      localStorage.setItem('postData', result)
       return result;
     };
 
@@ -26,8 +25,8 @@ const Posts = () => {
   let post;
 
   if (postData) {
-    post = postData.data.map((res) => (
-      <li key={res.id}>
+    post = postData.data.map((res) => {
+	    return <li key={res.id}>
         <Post
           id={res.id}
           title={res.text}
@@ -38,7 +37,7 @@ const Posts = () => {
           date={res.publishDate}
         />
       </li>
-    ));
+    });
   }
 
   console.log(postData, "postData");
