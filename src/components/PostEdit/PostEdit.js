@@ -1,5 +1,4 @@
 import React, { Fragment, useState, useEffect } from "react";
-import Spinner from "../../UI/Spinner/Spinner.js";
 import "./PostEdit.css";
 
 const PostEdit = (props) => {
@@ -18,9 +17,8 @@ const PostEdit = (props) => {
     );
     const updatedItems = [...postArray];
     updatedItems[itemIndex] = updatedItem;
-    console.log(...updatedItems, "updatedItems");
-    console.log(updatedItem, "item");
     localStorage.setItem("postData", JSON.stringify(updatedItems));
+    window.location.pathname = "/";
     return updatedItems;
   };
 
@@ -42,21 +40,13 @@ const PostEdit = (props) => {
     fetchData();
   }, []);
 
-  console.log(
-    JSON.parse(localStorage.getItem("postData")).find(
-      (i) => i.id === props.match.params.id
-    ),
-    "localStorageItem"
-  );
-  console.log(state, "state");
-
   return (
     <Fragment>
       <div className="form-section">
         <h1>Edit Post</h1>
         {postArray ? (
           <form className="form" onSubmit={editPostItem}>
-            <div class="form-control">
+            <div className="form-control">
               <label>Title</label>
               <input
                 id="title"
@@ -64,7 +54,7 @@ const PostEdit = (props) => {
                 onChange={(event) => setState({ text: event.target.value })}
               />
             </div>
-            <div class="form-control">
+            <div className="form-control">
               <label>Picture</label>
               <input
                 id="pictureUrl"
@@ -72,15 +62,12 @@ const PostEdit = (props) => {
                 onChange={(event) => setState({ image: event.target.value })}
               />
             </div>
-            <div class="form-control">
-              <label>Tags</label>
-              <input
-                id="tags"
-                value={state.tags}
-                onChange={(event) => setState({ tags: [event.target.value] })}
-              />
-            </div>
-            <button type="submit">Submit</button>
+            <button className="submit-button" type="submit">
+              Submit
+            </button>
+            <button className="submit-button" type="button" onClick={()=>window.location.pathname="/"}>
+           Back 
+            </button>
           </form>
         ) : null}
       </div>

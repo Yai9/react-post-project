@@ -35,17 +35,17 @@ const PostDetail = (props) => {
       post: props.match.params.id,
       publishDate: new Date().toLocaleString(),
     };
-	  if(postComments){
-    localStorage.setItem("comments", JSON.stringify(postComments.concat(addedComment)));
-   
-	  }else{
-    localStorage.setItem("comments", JSON.stringify([].concat(addedComment)));
-
-	  }
-	  setNewComment("");
-          setShowComments(false);
+    if (postComments) {
+      localStorage.setItem(
+        "comments",
+        JSON.stringify(postComments.concat(addedComment))
+      );
+    } else {
+      localStorage.setItem("comments", JSON.stringify([].concat(addedComment)));
+    }
+    setNewComment("");
+    setShowComments(false);
   };
-  console.log(postComments, "postComments");
 
   useEffect(() => {
     const fetchData = async () => {
@@ -57,16 +57,17 @@ const PostDetail = (props) => {
           },
         }
       );
-      
+
       const comments = await commentsData.json();
 
-      let ifHasPostId;
+      let commentHasPostId;
       if (postComments && postComments.length !== 0) {
-        ifHasPostId = postComments.filter(p=>p.post === props.match.params.id);
-	      console.log(ifHasPostId,'ifHasPostId')
+        commentHasPostId = postComments.filter(
+          (p) => p.post === props.match.params.id
+        );
       }
       if (postComments) {
-        setComments(comments.data.concat(...ifHasPostId));
+        setComments(comments.data.concat(...commentHasPostId));
       } else {
         setComments(comments.data);
       }
@@ -117,24 +118,21 @@ const PostDetail = (props) => {
             {comments ? (
               <div className="post_comments">
                 {comments.length == 0 ? (
-                        <div>
-                  <p>No comments for this post.</p>
-                          <input
-                            type="text"
-                            placeholder="Add new comment..."
-                            onChange={(event) =>
-                              setNewComment(event.target.value)
-                            }
-                          />
-                          <button
-                            className="detailed_post_button"
-                            onClick={addNewCommentHandler}
-                          >
-                            Add New Comment
-                          </button>
-                </div>
-			
-		) : (
+                  <div>
+                    <p>No comments for this post.</p>
+                    <input
+                      type="text"
+                      placeholder="Add new comment..."
+                      onChange={(event) => setNewComment(event.target.value)}
+                    />
+                    <button
+                      className="detailed_post_button"
+                      onClick={addNewCommentHandler}
+                    >
+                      Add New Comment
+                    </button>
+                  </div>
+                ) : (
                   <div>
                     <p
                       onClick={showCommentsHandler}
