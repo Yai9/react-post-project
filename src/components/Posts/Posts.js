@@ -60,7 +60,7 @@ const Posts = () => {
 
   return (
     <Fragment>
-      <div className="posts_container">{post}</div>
+      <div className="posts-container">{post}</div>
     </Fragment>
   );
 };

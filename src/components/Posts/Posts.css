@@ -1,4 +1,4 @@
-.posts_container {
+.posts-container {
   display: flex;
   flex-direction: column;
   margin: auto;
@@ -8,6 +8,6 @@
   height: 100%;
 }
 
-.posts_container li {
+.posts-container li {
   list-style: none;
 }

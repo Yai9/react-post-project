@@ -45,6 +45,7 @@ const PostDetail = (props) => {
     }
     setNewComment("");
     setShowComments(false);
+	  window.location.reload()
   };
 
   useEffect(() => {
@@ -74,15 +75,15 @@ const PostDetail = (props) => {
     };
 
     fetchData();
-  }, [showComments]);
+  }, []);
 
   return (
     <Fragment>
       {postDetail ? (
-        <div key={postDetail.id} className="detailed_post">
-          <div className="detailed_post_owner">
+        <div key={postDetail.id} className="detailed-post">
+          <div className="detailed-post-owner">
             <img
-              className="profile_image"
+              className="profile-image"
               src={postDetail.owner.picture}
               alt={postDetail.owner.firstName}
             />
@@ -90,25 +91,25 @@ const PostDetail = (props) => {
               {postDetail.owner.firstName + " "}
               {postDetail.owner.lastName}
             </h4>
-            <span className="post_date">{postDetail.publishDate}</span>
+            <span className="post-date">{postDetail.publishDate}</span>
           </div>
-          <div className="detailed_post_title">
+          <div className="detailed-post-title">
             <h2>{postDetail.text}</h2>
           </div>
-          <div className="detailed_post_image">
+          <div className="detailed-post-image">
             <img
-              className="post_image"
+              className="post-image"
               src={postDetail.image}
               alt={postDetail.title}
             />
           </div>
-          <div className="detailed_post_footer">
+          <div className="detailed-post-footer">
             <div>
               <p>
                 <span style={{ fontWeight: "bold" }}>{postDetail.likes}</span>{" "}
                 likes
               </p>
-              <div className="post_tags">
+              <div className="post-tags">
                 {postDetail.tags.map((tag) => (
                   <li key={tag}>{tag}</li>
                 ))}
@@ -116,7 +117,7 @@ const PostDetail = (props) => {
             </div>
 
             {comments ? (
-              <div className="post_comments">
+              <div className="post-comments">
                 {comments.length == 0 ? (
                   <div>
                     <p>No comments for this post.</p>
@@ -126,7 +127,7 @@ const PostDetail = (props) => {
                       onChange={(event) => setNewComment(event.target.value)}
                     />
                     <button
-                      className="detailed_post_button"
+                      className="detailed-post-button"
                       onClick={addNewCommentHandler}
                     >
                       Add New Comment
@@ -146,7 +147,7 @@ const PostDetail = (props) => {
                       {!showComments ? "Show" : "Hide"} comments
                     </p>
                     {showComments ? (
-                      <div className="post_comment_section">
+                      <div className="post-comment-section">
                         {comments.map((comment) => (
                           <li key={comment.id}>
                             <span style={{ fontWeight: "bold" }}>
@@ -167,7 +168,7 @@ const PostDetail = (props) => {
                             }
                           />
                           <button
-                            className="detailed_post_button"
+                            className="detailed-post-button"
                             onClick={addNewCommentHandler}
                           >
                             Add New Comment
@@ -182,10 +183,10 @@ const PostDetail = (props) => {
               <Spinner />
             )}
           </div>
-          <Link className="detailed_post_link" to="/">
+          <Link className="detailed-post-link" to="/">
             Back
           </Link>
-          <button className="detailed_post_button" onClick={editModeHandler}>
+          <button className="detailed-post-button" onClick={editModeHandler}>
             Edit Post
           </button>
         </div>
