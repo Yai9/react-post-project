@@ -26,17 +26,19 @@ const Posts = () => {
 
   if (postData) {
     post = postData.data.map((res) => {
-	    return <li key={res.id}>
-        <Post
-          id={res.id}
-          title={res.text}
-          image={res.image}
-          likes={res.likes}
-          owner={res.owner}
-          tags={res.tags}
-          date={res.publishDate}
-        />
-      </li>
+      return (
+        <li key={res.id}>
+          <Post
+            id={res.id}
+            title={res.text}
+            image={res.image}
+            likes={res.likes}
+            owner={res.owner}
+            tags={res.tags}
+            date={res.publishDate}
+          />
+        </li>
+      );
     });
   }
 
