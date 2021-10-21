@@ -1,24 +1,54 @@
 import React, { Fragment, useState, useEffect } from "react";
 import { Link } from "react-router-dom";
-import PostEdit from "../PostEdit/PostEdit.js";
+import Spinner from "../../UI/Spinner/Spinner.js";
 import "./PostDetail.css";
 
 const PostDetail = (props) => {
-  let postArray = JSON.parse(localStorage.getItem("postData"));
   let postItem = JSON.parse(localStorage.getItem("postData")).find(
     (i) => i.id === props.match.params.id
   );
 
   const [postDetail, setDetail] = useState(postItem);
   const [comments, setComments] = useState();
+  const [showComments, setShowComments] = useState(false);
+  const [newComment, setNewComment] = useState("");
+
+  let postComments = JSON.parse(localStorage.getItem("comments"));
 
   const editModeHandler = () => {
     return (window.location.pathname = `/edit/${props.match.params.id}`);
   };
 
+  const showCommentsHandler = () => {
+    setShowComments(!showComments);
+  };
+
+  const addNewCommentHandler = () => {
+    const addedComment = {
+      id: Math.random().toString(),
+      message: newComment,
+      owner: {
+        id: Math.random().toString(),
+        firstName: "You",
+        lastName: "",
+      },
+      post: props.match.params.id,
+      publishDate: new Date().toLocaleString(),
+    };
+	  if(postComments){
+    localStorage.setItem("comments", JSON.stringify(postComments.concat(addedComment)));
+   
+	  }else{
+    localStorage.setItem("comments", JSON.stringify([].concat(addedComment)));
+
+	  }
+	  setNewComment("");
+          setShowComments(false);
+  };
+  console.log(postComments, "postComments");
+
   useEffect(() => {
     const fetchData = async () => {
-
       const commentsData = await fetch(
         `https://dummyapi.io/data/v1/post/${props.match.params.id}/comment?limit=10`,
         {
@@ -27,18 +57,27 @@ const PostDetail = (props) => {
           },
         }
       );
+      
       const comments = await commentsData.json();
-      setComments(comments);
+
+      let ifHasPostId;
+      if (postComments && postComments.length !== 0) {
+        ifHasPostId = postComments.filter(p=>p.post === props.match.params.id);
+	      console.log(ifHasPostId,'ifHasPostId')
+      }
+      if (postComments) {
+        setComments(comments.data.concat(...ifHasPostId));
+      } else {
+        setComments(comments.data);
+      }
     };
 
     fetchData();
-  }, []);
+  }, [showComments]);
 
-  console.log(postDetail, "postDetail");
-  console.log(comments, "commentDetail");
   return (
     <Fragment>
-      {postDetail && comments && (
+      {postDetail ? (
         <div key={postDetail.id} className="detailed_post">
           <div className="detailed_post_owner">
             <img
@@ -75,12 +114,74 @@ const PostDetail = (props) => {
               </div>
             </div>
 
-            {comments.data.length == 0 ? (
-              <p>No comments on this post.</p>
-            ) : (
+            {comments ? (
               <div className="post_comments">
-                Show {" " + comments.data.length + " "} comments
+                {comments.length == 0 ? (
+                        <div>
+                  <p>No comments for this post.</p>
+                          <input
+                            type="text"
+                            placeholder="Add new comment..."
+                            onChange={(event) =>
+                              setNewComment(event.target.value)
+                            }
+                          />
+                          <button
+                            className="detailed_post_button"
+                            onClick={addNewCommentHandler}
+                          >
+                            Add New Comment
+                          </button>
+                </div>
+			
+		) : (
+                  <div>
+                    <p
+                      onClick={showCommentsHandler}
+                      style={{
+                        cursor: "pointer",
+                        backgroundColor: "#f5f5f5",
+                        padding: "10px",
+                        textAlign: "center",
+                      }}
+                    >
+                      {!showComments ? "Show" : "Hide"} comments
+                    </p>
+                    {showComments ? (
+                      <div className="post_comment_section">
+                        {comments.map((comment) => (
+                          <li key={comment.id}>
+                            <span style={{ fontWeight: "bold" }}>
+                              {comment.owner.firstName +
+                                " " +
+                                comment.owner.lastName +
+                                " "}
+                            </span>
+                            <p>{comment.message}</p>
+                          </li>
+                        ))}
+                        <div>
+                          <input
+                            type="text"
+                            placeholder="Add new comment..."
+                            onChange={(event) =>
+                              setNewComment(event.target.value)
+                            }
+                          />
+                          <button
+                            className="detailed_post_button"
+                            onClick={addNewCommentHandler}
+                          >
+                            Add New Comment
+                          </button>
+                        </div>
+                      </div>
+                    ) : null}
+                  </div>
+                )}
               </div>
+            ) : (
+              <Spinner />
             )}
           </div>
           <Link className="detailed_post_link" to="/">
@@ -90,6 +191,8 @@ const PostDetail = (props) => {
             Edit Post
           </button>
         </div>
+      ) : (
+        <Spinner />
       )}
     </Fragment>
   );

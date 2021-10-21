@@ -87,4 +87,11 @@ detailed_post_button:focus {
 
 .post_comments {
   margin: 10px;
+  padding: 10px;
+}
+
+.post_comment_section {
+  background-color: #f5f5f5;
+  padding: 10px;
+  border-radius: 5px;
 }
