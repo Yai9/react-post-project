@@ -1,4 +1,5 @@
 import React, { Fragment, useState, useEffect } from "react";
+import Spinner from "../../UI/Spinner/Spinner.js";
 import "./PostEdit.css";
 
 const PostEdit = (props) => {
