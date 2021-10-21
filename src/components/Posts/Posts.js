@@ -4,7 +4,6 @@ import "./Posts.css";
 
 const Posts = () => {
   const [postData, setData] = useState();
-
   useEffect(() => {
     const fetchData = async () => {
       const postData = await fetch(
@@ -23,9 +22,26 @@ const Posts = () => {
     fetchData();
   }, []);
   let post;
-
-  if (postData) {
+  let postArray = JSON.parse(localStorage.getItem("postData"));
+  if (postArray) {
+    post = postArray.map((res) => {
+      return (
+        <li key={res.id}>
+          <Post
+            id={res.id}
+            title={res.text}
+            image={res.image}
+            likes={res.likes}
+            owner={res.owner}
+            tags={res.tags}
+            date={res.publishDate}
+          />
+        </li>
+      );
+    });
+  } else if (postData) {
     post = postData.data.map((res) => {
+      localStorage.setItem("postData", JSON.stringify(postData.data));
       return (
         <li key={res.id}>
           <Post
@@ -42,7 +58,6 @@ const Posts = () => {
     });
   }
 
-  console.log(postData, "postData");
   return (
     <Fragment>
       <div className="posts_container">{post}</div>

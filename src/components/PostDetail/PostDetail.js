@@ -4,9 +4,13 @@ import PostEdit from "../PostEdit/PostEdit.js";
 import "./PostDetail.css";
 
 const PostDetail = (props) => {
-  const [postDetail, setDetail] = useState();
+  let postArray = JSON.parse(localStorage.getItem("postData"));
+  let postItem = JSON.parse(localStorage.getItem("postData")).find(
+    (i) => i.id === props.match.params.id
+  );
+
+  const [postDetail, setDetail] = useState(postItem);
   const [comments, setComments] = useState();
-  const [editMode, setEditMode] = useState(false);
 
   const editModeHandler = () => {
     return (window.location.pathname = `/edit/${props.match.params.id}`);
@@ -14,14 +18,6 @@ const PostDetail = (props) => {
 
   useEffect(() => {
     const fetchData = async () => {
-      const postData = await fetch(
-        `https://dummyapi.io/data/v1/post/${props.match.params.id}`,
-        {
-          headers: {
-            "app-id": "616dd2a1aabb17f7eeb7ff58",
-          },
-        }
-      );
 
       const commentsData = await fetch(
         `https://dummyapi.io/data/v1/post/${props.match.params.id}/comment?limit=10`,
@@ -31,11 +27,8 @@ const PostDetail = (props) => {
           },
         }
       );
-      const result = await postData.json();
       const comments = await commentsData.json();
-      setDetail(result);
       setComments(comments);
-      return result;
     };
 
     fetchData();
